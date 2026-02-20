@@ -1,8 +1,8 @@
-name: CI Node.js
+name: CI/CD Pipeline node.js
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/github_pages" ]
   pull_request:
     branches: [ "main" ]
 
@@ -16,10 +16,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+
       - run: npm ci
+      - run: npm run build --if-present
       - run: npm test
+
+      # Déploiement sur GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/feature/github_pages'
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./   # Le dossier à publier (ici la racine du projet)
