@@ -1,0 +1,24 @@
+{
+  "name": "devops-td3-ci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  "test": "jest"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taharachedi/DevOps-TD3-ci.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/taharachedi/DevOps-TD3-ci/issues"
+  },
+  "homepage": "https://github.com/taharachedi/DevOps-TD3-ci#readme",
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
+}
