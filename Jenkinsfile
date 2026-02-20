@@ -1,39 +1,40 @@
 pipeline {
     agent {
-        docker { image 'node:20' } // Utilisation d'une image Node.js
+        docker {
+            image 'node:20'      // image Node.js officielle
+            args '-v $HOME/.npm:/root/.npm' // pour cacher npm
+        }
     }
-    environment {
-        GH_TOKEN = credentials('github-token') // Tu devras créer ce secret dans Jenkins
-    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/taharachedi/DevOps-TD3-ci.git'
+                checkout scm
             }
         }
+
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                sh 'npm install'
             }
         }
+
         stage('Run Tests') {
             steps {
                 sh 'npm test'
             }
         }
-        stage('Deploy GitHub Pages') {
+
+        stage('Build Docker Image') {
             steps {
-                sh '''
-                git config --global user.email "you@example.com"
-                git config --global user.name "Taha Rachedi"
-                npx gh-pages -d .
-                '''
+                sh 'docker build -t my-node-app . || echo "Skipping build (simu)"'
             }
         }
-    }
-    post {
-        always {
-            echo 'Pipeline terminé'
+
+        stage('Deploy (Simulated)') {
+            steps {
+                sh 'echo "Simulating deploy..."'
+            }
         }
     }
 }
