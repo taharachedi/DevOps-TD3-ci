@@ -8,31 +8,34 @@ pipeline {
             }
         }
 
+        stage('Install Node.js') {
+            steps {
+                // Installer Node.js via Node Version Manager (ou vérifier si déjà installé)
+                sh 'apt-get update && apt-get install -y nodejs npm'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                // Exécuter npm install dans un container Node.js
-                sh 'docker run --rm -v $PWD:/app -w /app node:20 npm install'
+                sh 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Exécuter npm test dans le container Node.js
-                sh 'docker run --rm -v $PWD:/app -w /app node:20 npm test'
+                sh 'npm test'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build (Simulated)') {
             steps {
-                sh 'echo "Simulating docker build..."'
-                // Tu peux décommenter la ligne suivante si tu veux vraiment builder :
-                // sh 'docker build -t my-node-app .'
+                echo 'Build étape simulée (pas de Docker)'
             }
         }
 
         stage('Deploy (Simulated)') {
             steps {
-                sh 'echo "Simulating deploy..."'
+                echo 'Deploy étape simulée'
             }
         }
     }
