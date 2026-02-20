@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:20'      // image Node.js officielle
-            args '-v $HOME/.npm:/root/.npm' // pour cacher npm
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -15,19 +10,23 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                // Exécuter npm install dans un container Node.js
+                sh 'docker run --rm -v $PWD:/app -w /app node:20 npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test'
+                // Exécuter npm test dans le container Node.js
+                sh 'docker run --rm -v $PWD:/app -w /app node:20 npm test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t my-node-app . || echo "Skipping build (simu)"'
+                sh 'echo "Simulating docker build..."'
+                // Tu peux décommenter la ligne suivante si tu veux vraiment builder :
+                // sh 'docker build -t my-node-app .'
             }
         }
 
